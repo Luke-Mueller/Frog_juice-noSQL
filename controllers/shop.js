@@ -1,20 +1,20 @@
 const Product = require('../models/product');
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
-  .then(products => {
-    res.render('shop/product-list', { 
-      pageTitle: 'Frog Juice the Products',
-      path: '/products',
-      prods: products
-    });
-  })
-  .catch(err => console.log(err));
+  Product.fetchAll()
+    .then(products => {
+      res.render('shop/product-list', { 
+        pageTitle: 'Frog Juice the Products',
+        path: '/products',
+        prods: products
+      });
+    })
+    .catch(err => console.log(err));
 };
 
 exports.getProduct = (req, res, next) => {
 const prodId = req.params.productId;
-Product.findByPk(prodId)
+Product.findById(prodId)
   .then(product => {
     res.render('shop/product-detail', {
       pageTitle: product.title,
@@ -26,7 +26,7 @@ Product.findByPk(prodId)
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then(products => {
       res.render('shop/index', { 
         pageTitle: 'Frog Juice the Shop',
@@ -98,7 +98,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
     })
     .then(products => {
       const product = products[0];
-      product.cartItem.destroy();
+      return product.cartItem.destroy();
     })
     .then(result => {
       res.redirect('/cart');
@@ -118,10 +118,12 @@ exports.postOrder = (req, res, next) => {
       return req.user
         .createOrder()
         .then(order => {
-          return order.addProducts(products.map(product => {
-            product.orderItem = { quantity: product.cartItem.quantity };
-            return product
-          }));
+          return order.addProducts(
+            products.map(product => {
+              product.orderItem = { quantity: product.cartItem.quantity };
+              return product;
+            })
+          );
         })
         .catch(err => console.log(err))
     })

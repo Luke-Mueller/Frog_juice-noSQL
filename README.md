@@ -27,7 +27,6 @@ Features and Techs:
 * nodemon
 * ejs templating engine
 * mvc design pattern
-* mysql
-* sequelize
+* mongoDB
 
 I am building a noSQL version with MongoDB. 
