@@ -47,7 +47,7 @@ userSchema.methods.addToCart = function(product) {
     };
     this.cart = updatedCart;
     return this.save();
-}
+};
 
 userSchema.methods.removeFromCart = function(productId) {
   const updatedCartItems = this.cart.items.filter(item => {
@@ -55,7 +55,12 @@ userSchema.methods.removeFromCart = function(productId) {
   });
   this.cart.items = updatedCartItems;
   return this.save();
-}
+};
+
+userSchema.methods.clearCart = function() {
+  this.cart = { items: [] };
+  return this.save()
+};
 
 module.exports = mongoose.model('User', userSchema);
 
