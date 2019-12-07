@@ -13,7 +13,14 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
   const price = req.body.price;
-  const product = new Product(title, price, description, imageUrl);
+  const product = new Product(
+    title, 
+    price, 
+    description, 
+    imageUrl, 
+    null, 
+    req.user._id
+  );
   product
     .save()
     .then(result => {
@@ -52,9 +59,9 @@ exports.postEditProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
 
   const product = new Product(
-    updatedTitle, 
-    updatedPrice, 
-    updatedDescription, 
+    updatedTitle,
+    updatedPrice,
+    updatedDescription,
     updatedImageUrl,
     prodId
   )
@@ -70,14 +77,14 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll()
-  .then( products => {
-    res.render('admin/products', {
-      path: '/admin/products',
-      pageTitle: 'Admin Products',
-      prods: products,
+    .then(products => {
+      res.render('admin/products', {
+        path: '/admin/products',
+        pageTitle: 'Admin Products',
+        prods: products,
+      })
     })
-  })
-  .catch(err => console.log(err));
+    .catch(err => console.log(err));
 };
 
 exports.postDeleteProduct = (req, res, next) => {
