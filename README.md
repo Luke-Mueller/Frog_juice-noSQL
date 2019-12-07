@@ -1,4 +1,4 @@
-This is an online store of 'frog juice'. This mystical panacea, collected from the most exotic and prestine sites around the world, is a complete figment of my imagination. I used it as the concept behind my very first HTML page years ago.  Now the concept returns, and this time as an online store!  
+This is an online store of 'frog juice' using MongoDB in place of mySQL. This mystical panacea, collected from the most exotic and prestine sites around the world, is a complete figment of my imagination. I used it as the concept behind my very first HTML page years ago.  Now the concept returns, and this time as an online store!  
 
 Below I will maintain a 'Features and Techs' that lists the features the store employs.
 To view the store:
@@ -28,5 +28,3 @@ Features and Techs:
 * ejs templating engine
 * mvc design pattern
 * mongoDB
-
-I am building a noSQL version with MongoDB. 
