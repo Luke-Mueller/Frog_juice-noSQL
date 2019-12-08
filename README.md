@@ -28,3 +28,4 @@ Features and Techs:
 * ejs templating engine
 * mvc design pattern
 * mongoDB
+* mongoose

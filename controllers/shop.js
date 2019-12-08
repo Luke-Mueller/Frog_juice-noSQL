@@ -8,7 +8,8 @@ exports.getProducts = (req, res, next) => {
       res.render('shop/product-list', { 
         pageTitle: 'Frog Juice the Products',
         path: '/products',
-        prods: products
+        prods: products,
+        isAuthenticated: req.isLoggedIn
       });
     })
     .catch(err => console.log(err));
@@ -21,7 +22,8 @@ Product.findById(prodId)
     res.render('shop/product-detail', {
       pageTitle: product.title,
       path: '/products',
-      product: product
+      product: product,
+      isAuthenticated: req.isLoggedIn
     });
   })
   .catch(err => console.log(err));
@@ -33,7 +35,8 @@ exports.getIndex = (req, res, next) => {
       res.render('shop/index', { 
         pageTitle: 'Frog Juice the Shop',
         path: '/',
-        prods: products
+        prods: products,
+        isAuthenticated: req.isLoggedIn
       });
     })
     .catch(err => console.log(err));
@@ -48,7 +51,8 @@ exports.getCart = (req, res, next) => {
       res.render('shop/cart', { 
           pageTitle: 'Your Cart',
           path: '/cart',
-          products: products
+          products: products,
+          isAuthenticated: req.isLoggedIn
       });
     })
     .catch(err => console.log(err));
@@ -110,7 +114,8 @@ exports.getOrders = (req, res, next) => {
       res.render('shop/orders', { 
         pageTitle: 'Your Orders',
         path: '/orders',
-        orders: orders
+        orders: orders,
+        isAuthenticated: req.isLoggedIn
       });
     })
     .catch(err => console.log(err));
