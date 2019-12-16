@@ -28,4 +28,5 @@ Features and Techs:
 * mvc design pattern
 * mongoDB
 * mongoose
-* bcryptjs
+* bcryptjs password encryption 
+* csurf CSRF token provider
