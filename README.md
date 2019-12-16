@@ -3,11 +3,10 @@ This is an online store of 'frog juice' using MongoDB in place of mySQL. This my
 Below I will maintain a 'Features and Techs' that lists the features the store employs.
 To view the store:
 
-1. open the 'frog_juice' folder in your preferred IDE
-2. open the IDE terminal
-3. run 'npm install'
-4. run 'npm start'
-5. open 'localhost:3000' in your preferred web browser
+
+1. run 'npm install'
+2. run 'npm start'
+3. open 'localhost:3000' in your preferred web browser
       
       *** if you want to use a different port, 
       simply open the 'app.js' file and replace 
@@ -29,3 +28,4 @@ Features and Techs:
 * mvc design pattern
 * mongoDB
 * mongoose
+* bcryptjs
