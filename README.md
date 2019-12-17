@@ -30,3 +30,4 @@ Features and Techs:
 * mongoose
 * bcryptjs password encryption 
 * csurf CSRF token provider
+* connect-flash
