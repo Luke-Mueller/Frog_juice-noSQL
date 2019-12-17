@@ -31,3 +31,4 @@ Features and Techs:
 * bcryptjs password encryption 
 * csurf CSRF token provider
 * connect-flash
+* sendGrid node mailer
