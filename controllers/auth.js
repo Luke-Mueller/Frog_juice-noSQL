@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const bcrypt = require('bcryptjs');
 const nodeMailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
@@ -6,7 +8,7 @@ const User = require('../models/user');
 
 const transporter = nodeMailer.createTransport(sendgridTransport({ 
   auth: { 
-    api_key: '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'
+    api_key: ''
   } 
 }));
 
@@ -113,7 +115,7 @@ exports.postLogout = (req, res, next) => {
     console.log(err);
     res.redirect('/');
   });
-}
+};
 
 exports.getReset = (req, res, next) => {
   let message = req.flash('error');
@@ -127,4 +129,40 @@ exports.getReset = (req, res, next) => {
     pageTitle: 'Reset Password',
     errorMessage: message
   });
-}
+};
+
+exports.postReset = (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err)
+      return res.redirect('/reset');
+    }
+    const token = buffer.toString('hex');
+    User
+      .findOne({ email: req.body.email })
+      .then(user => {
+        if (!user) {
+          req.flash('error', 'No account exists with that email.')
+          return res.redirect('/reset');
+        }
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
+      })
+      .then(result => {
+        res.redirect('/');
+        transporter.sendMail({
+          to: req.body.email,
+          from: 'shop@frog_juice.com',
+          subject: 'Password reset',
+          html: `
+            <p>You requested a password reset for your account at Frog Juice, your one-stop shop for all things frog juice.</p>
+            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to reset your password.</p>
+          `
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  })
+};
