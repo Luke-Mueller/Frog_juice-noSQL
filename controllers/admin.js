@@ -74,7 +74,7 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.find()
+  Product.find({userId: req.user._id})
   //  //  controls which properties get passed 
   //   .select('title price -_id')
 
