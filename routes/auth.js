@@ -22,19 +22,23 @@ router.post(
             );
           } 
         });
-      }),
+      })
+      .normalizeEmail(),
     body(
       'password',
       'The password must be at least 5 characters long and contain only numbers and letters.'
     )
       .isLength({ min: 5 })
-      .isAlphanumeric(),
-    body('confirmPassword').custom((value, { req }) => {
+      .isAlphanumeric()
+      .trim(),
+    body('confirmPassword')
+    .custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error('Confirm password does not match the password');
       }
       return true;
     })
+    .trim()
   ], 
   authController.postSignup
 );
@@ -45,13 +49,15 @@ router.post(
   [
     body('email')
       .isEmail()
-      .withMessage('Please enter a valid email.'),
+      .withMessage('Please enter a valid email.')
+      .normalizeEmail(),
     body(
       'password',
       'The password must be at least 5 characters long and contain only numbers and letters.'
     )
       .isLength({ min: 5 })
       .isAlphanumeric()
+      .trim()
   ],
   authController.postLogin
 );
