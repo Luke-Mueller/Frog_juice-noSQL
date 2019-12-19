@@ -32,3 +32,4 @@ Features and Techs:
 * csurf CSRF token provider
 * connect-flash
 * sendGrid node mailer
+* express validator

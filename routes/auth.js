@@ -1,14 +1,60 @@
 const express = require('express');
+const { check, body } = require('express-validator/check');
 
 const authController = require('../controllers/auth');
+const User = require('../models/user');
 
 const router = express.Router();
 
 router.get('/signup', authController.getSignup);
-router.post('/signup', authController.postSignup);
+router.post(
+  '/signup',
+  [
+    check('email')
+      .isEmail()
+      .withMessage('Please enter a valid email.')
+      //  Custom validator example
+      .custom((value, { req }) => {
+        return User.findOne({ email: value }).then(userDoc => {
+          if (userDoc) {
+            return Promise.reject(
+              'Email already exists.'
+            );
+          } 
+        });
+      }),
+    body(
+      'password',
+      'The password must be at least 5 characters long and contain only numbers and letters.'
+    )
+      .isLength({ min: 5 })
+      .isAlphanumeric(),
+    body('confirmPassword').custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error('Confirm password does not match the password');
+      }
+      return true;
+    })
+  ], 
+  authController.postSignup
+);
 
 router.get('/login', authController.getLogin);
-router.post('/login', authController.postLogin);
+router.post(
+  '/login', 
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email.'),
+    body(
+      'password',
+      'The password must be at least 5 characters long and contain only numbers and letters.'
+    )
+      .isLength({ min: 5 })
+      .isAlphanumeric()
+  ],
+  authController.postLogin
+);
 
 router.get('/reset', authController.getReset);
 router.post('/reset', authController.postReset);
