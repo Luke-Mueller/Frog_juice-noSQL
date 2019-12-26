@@ -49,7 +49,7 @@ router.post(
   [
     body('email')
       .isEmail()
-      .withMessage('Please enter a valid email.')
+      .withMessage('Please enter a valid email address.')
       .normalizeEmail(),
     body(
       'password',

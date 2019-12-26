@@ -10,7 +10,7 @@ const User = require('../models/user');
 const transporter = nodeMailer.createTransport(
   sendgridTransport({ 
     auth: { 
-      api_key: ''
+      api_key: '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'
     } 
   })
 );
@@ -93,9 +93,11 @@ exports.postLogin = (req, res, next) => {
           res.redirect('/login');
         })
     })
-    .catch(
-      err => console.log(err)
-    );
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getSignup = (req, res, next) => {
@@ -158,10 +160,9 @@ exports.postSignup = (req, res, next) => {
       })
     })
     .catch(err => {
-      console.log(err);
-    })
-    .catch(err => {
-      err => console.log(err)
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -217,8 +218,10 @@ exports.postReset = (req, res, next) => {
         })
       })
       .catch(err => {
-        console.log(err);
-      })
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
   })
 };
 
@@ -245,8 +248,10 @@ exports.getNewPassword = (req, res, next) => {
       });
     })
     .catch(err => {
-      console.log(err);
-    })
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postNewPassword = (req, res, next) => {
@@ -275,6 +280,8 @@ exports.postNewPassword = (req, res, next) => {
       res.redirect('/login');
     })
     .catch(err => {
-      console.log(err);
-    })
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
