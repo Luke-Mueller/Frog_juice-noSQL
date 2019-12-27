@@ -9,13 +9,13 @@ exports.getAddProduct = (req, res, next) => {
     editing: false,
     hasError: false,
     errorMessage: null,
-    validationResult: []
+    validationErrors: []
   });
 };
 
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
+  const imageUrl = req.file;
   const price = req.body.price;
   const description = req.body.description;
   const errors = validationResult(req);
@@ -66,8 +66,11 @@ exports.postAddProduct = (req, res, next) => {
       //   errorMessage: 'Database operation failed. Please try again',
       //   validationError: []
       // });
+
       // deal with error by redirecting to an error page:
       // res.redirect('/500');
+
+      // deal with error by nexting a new error. throw new error in sync code.
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);

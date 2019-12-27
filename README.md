@@ -33,3 +33,4 @@ Features and Techs:
 * connect-flash
 * sendGrid node mailer
 * express validator
+* multer - parses incoming requests for files

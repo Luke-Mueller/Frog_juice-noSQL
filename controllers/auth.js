@@ -152,12 +152,12 @@ exports.postSignup = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login');
-      return transporter.sendMail({
-        to: email,
-        from: 'shop@frog_juice.com',
-        subject: 'Signup complete',
-        html: '<h1>You did it!</h1>'
-      })
+      // return transporter.sendMail({
+      //   to: email,
+      //   from: 'shop@frog_juice.com',
+      //   subject: 'Signup complete',
+      //   html: '<h1>You did it!</h1>'
+      // })
     })
     .catch(err => {
       const error = new Error(err);
