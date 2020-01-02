@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const Product = require('../models/product');
 const Order = require('../models/order');
 
@@ -20,19 +23,20 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
 const prodId = req.params.productId;
-Product.findById(prodId)
-  .then(product => {
-    res.render('shop/product-detail', {
-      product: product,
-      pageTitle: product.title,
-      path: '/products'
+  Product.findById(prodId)
+    .then(product => {
+      res.render('shop/product-detail', {
+        product: product,
+        pageTitle: product.title,
+        path: '/products'
+      });
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
-  })
-  .catch(err => {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
-  });};
+};
 
 exports.getIndex = (req, res, next) => {
   Product.find()
@@ -47,7 +51,8 @@ exports.getIndex = (req, res, next) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });};
+    });
+};
 
 exports.getCart = (req, res, next) => {
   req.user
@@ -65,7 +70,8 @@ exports.getCart = (req, res, next) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });};
+    });
+};
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
@@ -90,7 +96,8 @@ exports.postCartDeleteProduct = (req, res, next) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });};
+    });
+};
 
 exports.postOrder = (req, res, next) => {
   req.user
@@ -119,7 +126,8 @@ exports.postOrder = (req, res, next) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });}
+    });
+};
 
 exports.getOrders = (req, res, next) => {
   Order.find({ 'user.userId': req.user._id })
@@ -134,4 +142,18 @@ exports.getOrders = (req, res, next) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });};
+    });
+};
+
+exports.getInvoice = (req, res, next) => {
+  const orderId = req.params.orderId;
+  console.log('orderId: ', orderId);
+  const invoiceName = 'invoice-' + orderId + '.pdf';
+  const invoicePath = path.join('data', 'invoices', invoiceName)
+  fs.readFile(invoicePath, (err, data) => {
+    if (err) {
+      return next(err);
+    }
+    res.send(data);
+  });
+};
