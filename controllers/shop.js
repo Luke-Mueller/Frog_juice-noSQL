@@ -8,7 +8,7 @@ exports.getProducts = (req, res, next) => {
   Product.find()
     .then(products => {
       console.log(products);
-      res.render('shop/product-list', { 
+      res.render('shop/product-list', {
         prods: products,
         pageTitle: 'Frog Juice the Products',
         path: '/products'
@@ -22,7 +22,7 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getProduct = (req, res, next) => {
-const prodId = req.params.productId;
+  const prodId = req.params.productId;
   Product.findById(prodId)
     .then(product => {
       res.render('shop/product-detail', {
@@ -41,7 +41,7 @@ const prodId = req.params.productId;
 exports.getIndex = (req, res, next) => {
   Product.find()
     .then(products => {
-      res.render('shop/index', { 
+      res.render('shop/index', {
         prods: products,
         pageTitle: 'Frog Juice the Shop',
         path: '/'
@@ -60,7 +60,7 @@ exports.getCart = (req, res, next) => {
     .execPopulate()
     .then(user => {
       const products = user.cart.items;
-      res.render('shop/cart', { 
+      res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
         products: products
@@ -132,7 +132,7 @@ exports.postOrder = (req, res, next) => {
 exports.getOrders = (req, res, next) => {
   Order.find({ 'user.userId': req.user._id })
     .then(orders => {
-      res.render('shop/orders', { 
+      res.render('shop/orders', {
         path: '/orders',
         pageTitle: 'Your Orders',
         orders: orders
@@ -147,14 +147,23 @@ exports.getOrders = (req, res, next) => {
 
 exports.getInvoice = (req, res, next) => {
   const orderId = req.params.orderId;
-  const invoiceName = 'invoice-' + orderId + '.pdf';
-  const invoicePath = path.join('data', 'invoices', invoiceName)
-  fs.readFile(invoicePath, (err, data) => {
-    if (err) {
-      return next(err);
+  Order.findById(order.id).then(order => {
+    if (!order) {
+      return next(new Error('No order found'));
     }
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName + '"');
-    res.send(data);
-  });
+    if (order.user.userId.toString() !== req.user._id.toString()) {
+      return new Error('Unauthorized');
+    }
+    const invoiceName = 'invoice-' + orderId + '.pdf';
+    const invoicePath = path.join('data', 'invoices', invoiceName)
+    fs.readFile(invoicePath, (err, data) => {
+      if (err) {
+        return next(err);
+      }
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName + '"');
+      res.send(data);
+    });
+  }).catch(err => next(err));
+
 };
