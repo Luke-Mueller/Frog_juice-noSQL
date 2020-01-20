@@ -245,6 +245,24 @@ form {
   color: #ff4242;
 }
 
+.pagination {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.pagination a {
+  text-decoration: none;
+  color: #888;
+  padding: 0.5rem;
+  margin: 0 1rem;
+}
+
+.pagination a:hover,
+.pagination a:active,
+.pagination a.active {
+  color: #6e046e;
+}
+
 /* .user--message-error {} */
 
 @media (min-width: 768px) {

@@ -1,3 +1,5 @@
+const fileHelper = require('../utils/file');
+
 const { validationResult } = require('express-validator/check');
 
 const Product = require('../models/product');
@@ -161,6 +163,7 @@ exports.postEditProduct = (req, res, next) => {
       product.price = updatedPrice;
       product.description = updatedDescription;
       if (image) {
+        fileHelper.deleteFile(product.imageUrl);
         product.imageUrl = image.path;
       }
       return product.save().then(result => {
@@ -176,12 +179,12 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.find({userId: req.user._id})
-  //  //  controls which properties get passed 
-  //   .select('title price -_id')
+  Product.find({ userId: req.user._id })
+    //  //  controls which properties get passed 
+    //   .select('title price -_id')
 
-  //  //  controls which properties are pre-populated
-  //   .populate('userId', 'name')
+    //  //  controls which properties are pre-populated
+    //   .populate('userId', 'name')
     .then(products => {
       console.log(products);
       res.render('admin/products', {
@@ -199,7 +202,14 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteOne({_id: prodId, userId: req.user._id})
+  Product.findById(prodId)
+    .then(product => {
+      if (!product) {
+        return next(new Error('Product not found'));
+      }
+      fileHelper.deleteFile(product.imageUrl);
+      return Product.deleteOne({ _id: prodId, userId: req.user._id })
+    })
     .then(() => {
       console.log('Product destroyed');
       res.redirect('/admin//products');
