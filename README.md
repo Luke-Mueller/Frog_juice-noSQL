@@ -34,3 +34,4 @@ Features and Techs:
 * sendGrid node mailer
 * express validator
 * multer - parses incoming requests for files
+* pdfkit - creates pdf files on the fly
